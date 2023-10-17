@@ -1,0 +1,7 @@
+/*
+/*/
+!/modules/
+!main.nf
+!nextflow.config
+!params.config
+!.gitignore
