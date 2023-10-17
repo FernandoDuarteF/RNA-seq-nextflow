@@ -9,7 +9,7 @@ params.EXTRAPARS = ""
 
 process index {
     publishDir(params.OUTPUT, mode: 'copy')
-    tag {"${reference}"}
+    tag {"${ref.getSimpleName()}"}
     container params.CONTAINER
     label params.LABEL
 
@@ -28,13 +28,12 @@ process index {
     --genomeDir ${ref.getSimpleName()} \
     --genomeFastaFiles ${ref} \
     --sjdbOverhang ${overhang} \
-    --sjdbGTFfile ${anno} \
-    --genomeSAindexNbases 11
+    --sjdbGTFfile ${anno}
     """
 }
 
 process aln {
-    publishDir(params.OUTPUT, mode: 'copy')
+    publishDir(params.OUTPUT, mode: 'copy', pattern: '*ReadsPerGene.out.tab')
     tag {"${pair_id}"}
     container params.CONTAINER
     label params.LABEL
@@ -96,6 +95,7 @@ workflow STAR {
     main:
     star_index = index(overhang, reference, annotation)
     star_aln = aln(star_index, reads)
+
     emit:
     quants = star_aln.quants
 }
@@ -106,7 +106,7 @@ workflow MATRIX {
 
     main:
     counts.map{
-                [it[1]] //fromFailePairs output a tuple with id and both pair reads. Discard the id
+                [it[1]] //Remove id the from emited tuple and collect output counts
         }.collect().set{countsm}
     out = matrix(countsm)
     
