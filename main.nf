@@ -33,7 +33,7 @@ if (params.help) {
 fastqcOutputFolder    = "results/fastqc"
 alnOutputFolder       = "results/aln"
 multiqcOutputFolder   = "results/multiQC"
-trimOutputFolder      = "results/trimmomatic" 
+trimOutputFolder      = "results/trimmomatic"
  
 Channel
     .fromFilePairs( params.reads )  											 // read the files indicated by the wildcard                            
@@ -52,18 +52,24 @@ annotation = file(params.annotation)
 adaptors   = file(params.adaptors)
 
 include { FASTQC } from "${baseDir}/modules/fastqc" addParams(OUTPUT: fastqcOutputFolder, LABEL:"qc")
+include { FASTQC as FASTQC_TRIM } from "${baseDir}/modules/fastqc" addParams(OUTPUT: fastqcOutputFolder, LABEL:"qc")
 include { TRIM_PE } from "${baseDir}/modules/trimmomatic.nf" addParams(OUTPUT: trimOutputFolder, LABEL:"idx", EXTRAPARS:"ILLUMINACLIP:${adaptors}:2:30:10")
 include { STAR } from "${baseDir}/modules/star" addParams(OUTPUT: alnOutputFolder, LABEL:"idx")
 include { MATRIX } from "${baseDir}/modules/star" addParams(OUTPUT: alnOutputFolder)
+include { multiqc } from "${baseDir}/modules/multiqc" addParams(OUTPUT: multiqcOutputFolder)
 
 workflow {
 	fastqc_out = FASTQC(reads)
   trimmomatic = TRIM_PE(reads)
   reads_trim = trimmomatic.trimpe
-  reads_trim.view()
+  reads_trim_qc = FASTQC_TRIM(reads_trim)
+  //reads_trim.view()
 	map_res = STAR(overhang, reference, annotation, reads_trim)
-  map_res.quants.view()
-	map_res.quants.collect().view()
+  to_multiqc = reads_trim_qc.qc_out.mix(map_res.quants.map{[it[1]]}).mix(map_res.logs.map{[it[1]]}).collect()
+  to_multiqc.view()
+  multiqc(to_multiqc)
+  //map_res.quants.view()
+	//map_res.quants.collect().view()
        // matrix = MATRIX(map_res.quants)
 }
 

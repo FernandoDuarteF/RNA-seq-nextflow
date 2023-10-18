@@ -70,6 +70,7 @@ process matrix {
     label params.LABEL
 
     input:
+    val col
     path counts
 
     output:
@@ -77,7 +78,7 @@ process matrix {
 
     script:
     """
-    paste ${counts} | grep -v "_" | awk '{printf "%s\t", \$1}{for (i=4;i<=NF;i+=4) printf "%s\t", \$i; printf "\\n" }' > tmp
+    paste ${counts} | grep -v "_" | awk '{printf "%s\t", \$1}{for (i=${col};i<=NF;i+=${col}) printf "%s\t", \$i; printf "\\n" }' > tmp
     sed -e "1igene_name\t\$(ls ${counts} | tr '\n' '\t' | sed 's/ReadsPerGene.out.tab//g')" tmp | cut -f1-9 > raw_counts_matrix.txt
     rm tmp
     """
@@ -98,6 +99,7 @@ workflow STAR {
 
     emit:
     quants = star_aln.quants
+    logs = star_aln.logs
 }
 
 workflow MATRIX {

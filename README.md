@@ -1,6 +1,6 @@
-### RNA-seq
+## RNA-seq
 
-## Processing
+### Processing
 
 This pipeline is for paired end reads RNA-seq sequences. The final output is matrix called ``raw_counts_matrix.txt`` with counts for each sample, located in ``$projectDir/results/folder``.
 
@@ -20,8 +20,12 @@ Parameters needed:
 - overhang value. View STAR docummnetation for correct value. FastQC on reads might be need to be ran first.
 - adaptors.fasta file (leave empty ("") if adaptor trimming is not necessary)
 
+Note that reference files (fasta and gtf) need to be uncompressed for building the index (for now).
+
 In ``nextflow.config`` is not necessary to indicate a default container if it's not necessary. If a linux environment is needed for a specific process without a container, use ``biocorecrg/debian-perlbrew:latest`` from quay.io.
 
 For trimmomatic process in ``main.nf``, choose extraparameters for adapter and quality trimming. ``ILLUMINACLIP:${adaptors}:2:30:10`` is placed as an example.
 
 Final output is ``*ReadsPerGene.out.tab`` count files.
+
+If strandness is known, the MATRIX process can be used for building the count matrix from the STAR outpt. Use the correct column number (2, 3, or 4, according to strandness) from the ``*ReadsPerGene.out.tab`` files (refer to STAR output explanation) as an input parameter. Refer to STAR manual if unclear.

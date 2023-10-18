@@ -16,7 +16,7 @@ process fastqc {
     path(reads)
 
     output:
-    path("*_fastqc*")
+    path("*_fastqc*"), emit: fastqc_out
 
     script:
     """
@@ -31,6 +31,9 @@ workflow FASTQC {
     main:
     reads.map{
 		[it[1]] //fromFailePairs output a tuple with id and both pair reads. Discard the id
-	}.flatten().set{readsqc} //flatten tuple, equivalent to extend all fastq files (check .view() if not sure)
-    fastqc(readsqc)
+	  }.flatten().set{readsqc} //flatten tuple, equivalent to extend all fastq files (check .view() if not sure)
+    qc_out = fastqc(readsqc)
+
+    emit:
+    qc_out = qc_out.fastqc_out
 }
