@@ -29,3 +29,24 @@ For trimmomatic process in ``main.nf``, choose extraparameters for adapter and q
 Final output is ``*ReadsPerGene.out.tab`` count files.
 
 If strandness is known, the MATRIX process can be used for building the count matrix from the STAR outpt. Use the correct column number (2, 3, or 4, according to strandness) from the ``*ReadsPerGene.out.tab`` files (refer to STAR output explanation) as an input parameter. Refer to STAR manual if unclear.
+
+### Downstream analysis
+
+You can use the dockerfile to build the docker image. After bulding it, you can run the DESeq2 script in a docker cointainer:
+
+```
+# Build docker image
+docker build -t docker_image:tag
+# Mount folder with script and input files into a new container
+docker run --detach --volume $(pwd):/scratch --name deseq2_container docker_image:tag tail -f /dev/null
+# Run script inside container
+docker run -it deseq2_container /bin/bash
+Rscript deseqV2.R -t STAR -g gene
+```
+
+Do ``Rscript deseqV2.R --help`` for argument options. The script above uses default arguments.
+
+Bear in mind that this script was made with single factor in mind (Genotype), and two levels (wt and ko, view example metadata example). Make any necessary changes to adjust the script to your experimental design.
+
+**IN PROGRESS**
+
