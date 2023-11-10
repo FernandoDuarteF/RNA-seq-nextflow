@@ -28,7 +28,9 @@ For trimmomatic process in ``main.nf``, choose extraparameters for adapter and q
 
 Final output is ``*ReadsPerGene.out.tab`` count files.
 
-If strandness is known, the MATRIX process can be used for building the count matrix from the STAR outpt. Use the correct column number (2, 3, or 4, according to strandness) from the ``*ReadsPerGene.out.tab`` files (refer to STAR output explanation) as an input parameter. Refer to STAR manual if unclear.
+If strandness is known, the MATRIX process can be used for building the count matrix from the STAR outpt. Use the correct column number (2, 3, or 4, according to strandness) from the ``*ReadsPerGene.out.tab`` files as an input parameter. Refer to STAR manual if unclear.
+
+**PIPELINE IS STILL IN PROGRESS** Salmon module is to be included. Also, automatically detect read length based on mode using fastq output.
 
 ### Downstream analysis
 
