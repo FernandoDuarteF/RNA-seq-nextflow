@@ -46,9 +46,30 @@ docker run -it deseq2_container /bin/bash
 Rscript deseqV2.R -t STAR -g gene
 ```
 
-Do ``Rscript deseqV2.R --help`` for argument options. The script above uses default arguments.
+Run ``Rscript deseqV2.R --help`` for argument options:
 
-Bear in mind that this script was made with single factor in mind (Genotype), and two levels (wt and ko, view example metadata example). Make any necessary changes to adjust the script to your experimental design.
+```
+usage: dockerV2.R [-h] [-st STAR_MATRIX] [-sl SALMON_FOLDER] [-t2g TX2GENE]
+                  [-m METADATA] [-t DATA_TYPE] [-g GENE_COUNTS]
 
-**IN PROGRESS**
+options:
+  -h, --help            show this help message and exit
+  -st STAR_MATRIX, --star_matrix STAR_MATRIX
+                        Path to STAR raw counts table
+  -sl SALMON_FOLDER, --salmon_folder SALMON_FOLDER
+                        Path to salmon count folders
+  -t2g TX2GENE, --tx2gene TX2GENE
+                        Path to tx2gene table
+  -m METADATA, --metadata METADATA
+                        Path to metadata table
+  -t DATA_TYPE, --data_type DATA_TYPE
+                        Run the script on STAR or salmon output [STAR,salmon]
+  -g GENE_COUNTS, --gene_counts GENE_COUNTS
+                        Output gene counts for specific gene based on tx2gene
+                        table gene names (optional)
+```
+
+Take into account that this script was made with single factor in mind (Genotype), and two levels (wt and ko). View ``DESeq2`` folder for **tx2gene** and **metadata** for examples and format. Make any necessary changes to adjust the script to your experimental design.
+
+**IN PROGRESS. SALMON NEEDS TO BE INCLUDED**
 

@@ -1,24 +1,15 @@
 #!/usr/bin/env Rscript
 
-#BiocManager::install("DESeq2")
-#BiocManager::install("tximport")
-#install.packages("argparse")
-
-library("DESeq2")
-library("tximport")
-library("ggplot2")
-#library("patchwork")
-library("argparse")
-library("ggrepel") #for showing labels
+suppressWarnings(library("argparse"))
 
 parser = ArgumentParser()
 
-parser$add_argument("-st", "--star_matrix", type="character", default="./raw_counts_matrix.txt", help="Path to STAR raw counts matrix file")
+parser$add_argument("-st", "--star_matrix", type="character", default="./raw_counts_matrix.txt", help="Path to STAR raw counts table")
 parser$add_argument("-sl", "--salmon_folder", type="character", default="./salmon", help="Path to salmon count folders")
-parser$add_argument("-t2g", "--tx2gene", type="character", default="./tx2gene.gencode.v29.csv", help="path to mock theoretical composition (%) in csv (genus,composition)")
-parser$add_argument("-m", "--metadata", type="character", default="./meta_sorted.tsv", help="Path to metadata file for DESeq2")
+parser$add_argument("-t2g", "--tx2gene", type="character", default="./tx2gene.gencode.v29.csv", help="Path to tx2gene table")
+parser$add_argument("-m", "--metadata", type="character", default="./meta_sorted.tsv", help="Path to metadata table")
 parser$add_argument("-t", "--data_type", type="character", default="STAR", help="Run the script on STAR or salmon output [STAR,salmon]")
-parser$add_argument("-g", "--gene_counts", type="character", help="Output gene counts for specific gene")
+parser$add_argument("-g", "--gene_counts", type="character", help="Outputs gene counts for specific gene based on tx2gene table gene names (optional)")
 
 # Get command line options, if help option encountered - print help and exit:
 args <- parser$parse_args()
@@ -30,7 +21,12 @@ sal_counts = args$salmon_folder
 data_type = args$data_type
 gene = args$gene_counts
 
-
+#Load packages
+suppressWarnings(library("DESeq2"))
+suppressWarnings(library("tximport"))
+suppressWarnings(library("ggplot2"))
+#library("patchwork")
+suppressWarnings(library("ggrepel")) #for showing labels
 #star_counts = "raw_counts_matrix.txt" #star raw counts location
 #metadata = "meta_sorted.tsv" #metadata for DESeq2
 #tx2gene = "tx2gene.gencode.v29.csv" #tx2 gene file for salmon

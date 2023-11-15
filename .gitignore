@@ -1,6 +1,7 @@
 /*
 /*/
 !/modules/
+!/DESeq/
 !main.nf
 !nextflow.config
 !params.config
