@@ -20,7 +20,7 @@ Parameters needed:
 - overhang value. View STAR docummnetation for correct value. FastQC on reads might be need to be ran first.
 - adaptors.fasta file (leave empty ("") if adaptor trimming is not necessary)
 
-Note that reference files (fasta and gtf) need to be uncompressed for building the index (for now).
+Note that reference files (fasta and gtf) need to be uncompressed for building the index (for now). The pipeline can handle compressed fastq files.
 
 Is not necessary to indicate a default container in ``nextflow.config``, but you can do so in order to run a process that has no containers asigned (not the case here). If a linux environment is needed for a specific process with no containers asigned, use ``biocorecrg/debian-perlbrew:latest`` from quay.io.
 
@@ -28,7 +28,7 @@ For trimmomatic process in ``main.nf``, choose extraparameters for adapter and q
 
 Final output is ``*ReadsPerGene.out.tab`` count files.
 
-If strandness is known, the MATRIX process can be used for building the count matrix from the STAR outpt. Use the correct column number (2, 3, or 4, according to strandness) from the ``*ReadsPerGene.out.tab`` files as an input parameter. Refer to STAR manual if unclear.
+If strandness is known, the MATRIX process can be used for building the count matrix from the STAR outpt. Use the correct column number (2, 3, or 4, according to strandness) from the ``*ReadsPerGene.out.tab`` files as an input parameter. Refer to STAR manual if unclear. ACTUALLY BUILDING THE MATRIX IS NOT POSSIBLE AS IT DEPENDS ON STRANDNESS BUT SCRIPT WAS BUILT FOR FIXED TABLES
 
 **PIPELINE IS STILL IN PROGRESS** Salmon module is to be included. Also, automatically detect read length based on mode using fastq output.
 
@@ -91,3 +91,9 @@ Take into account that this script was made with single factor in mind (Genotype
 
 * Add RSeQC for gene body coverage for STAR bam output
 * Add line to join counts from star output
+* MATRIX process cannot be used if strandness is not known
+
+
+Remember difference between channels (queue channel and value channel)
+
+The resource parameters in nextflow.config file are not optimal, they are just there for demostration.
