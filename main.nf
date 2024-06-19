@@ -21,7 +21,7 @@ overhang                        : ${params.overhang}
 
 // this prints the help in case you use --help parameter in the command line and it stops the pipeline
 if (params.help) {
-    log.info 'This is the Biocore\'s NF test pipeline'
+    log.info 'This is a test pipeline'
     log.info 'Enjoy!'
     log.info '\n'
     exit 1
