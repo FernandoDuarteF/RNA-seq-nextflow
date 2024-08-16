@@ -1,5 +1,7 @@
 ## RNA-seq
 
+trial trial
+
 ### Processing
 
 This pipeline is for paired end reads RNA-seq sequences. The final output is matrix called ``raw_counts_matrix.txt`` with counts for each sample, located in ``$projectDir/results/folder``. The pipeline is made to run on a specific cluster using a SGE based executor. Modify profile options in ``nextflow.config`` accordingly.
